@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { WordCountService } from "../services/WordCountsService";
 import { IResultDTO } from "../dto/IResultDTO";
-import ReactWordcloud from "react-wordcloud";
+import ReactWordcloud, { Scale } from "react-wordcloud";
 
 import 'tippy.js/dist/tippy.css';
 import 'tippy.js/animations/scale.css';
@@ -34,8 +34,15 @@ function WordCloudComponent() {
     fetchData();
   }, [userToken]);
 
+  const options = {
+    rotations: 0,
+    scale: "log" as Scale
+  };
+
   return (
-        <ReactWordcloud words={wordCounts}/>
+    <div style={{ height: 500, width: 500 }}>
+        <ReactWordcloud options={options} words={wordCounts}/>
+    </div>
   );
 }
 
