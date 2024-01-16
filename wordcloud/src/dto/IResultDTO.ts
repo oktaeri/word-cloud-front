@@ -1,4 +1,4 @@
 export interface IResultDTO {
-    word: string,
-    count: number,
+    text: string,
+    value: number
 }

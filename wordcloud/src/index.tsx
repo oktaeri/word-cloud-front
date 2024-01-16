@@ -7,6 +7,8 @@ import {
 
 import WordCloudComponent from './components/WordCloudComponent';
 
+import 'tippy.js/dist/tippy.css';
+import 'tippy.js/animations/scale.css';
 import './index.css';
 import reportWebVitals from './reportWebVitals';
 

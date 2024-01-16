@@ -1,9 +1,12 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import { WordCloudService } from "../services/WordCloudService";
+import { WordCountService } from "../services/WordCountsService";
 import { IResultDTO } from "../dto/IResultDTO";
+import ReactWordcloud from "react-wordcloud";
 
-// Example component
+import 'tippy.js/dist/tippy.css';
+import 'tippy.js/animations/scale.css';
+
 function WordCloudComponent() {
   const { userToken } = useParams<{ userToken?: string }>();
   const [wordCounts, setWordCounts] = useState<IResultDTO[]>([]);
@@ -16,7 +19,7 @@ function WordCloudComponent() {
         return;
       }
 
-      const wordCloudService = new WordCloudService();
+      const wordCloudService = new WordCountService();
 
       try {
         const fetchedWordCounts: IResultDTO[] =
@@ -32,17 +35,7 @@ function WordCloudComponent() {
   }, [userToken]);
 
   return (
-    <div>
-      <h1>Word Cloud Counts</h1>
-      {userToken && <p>User Token: {userToken}</p>}
-      <ul>
-        {wordCounts.map((result, index) => (
-          <li key={index}>
-            Word: {result.word}, Count: {result.count}
-          </li>
-        ))}
-      </ul>
-    </div>
+        <ReactWordcloud words={wordCounts}/>
   );
 }
 
