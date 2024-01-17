@@ -6,6 +6,7 @@ import {
 } from "react-router-dom";
 
 import WordCloudComponent from './components/WordCloudComponent';
+import UploadComponent from './components/UploadComponent';
 
 import 'tippy.js/dist/tippy.css';
 import 'tippy.js/animations/scale.css';
@@ -16,6 +17,10 @@ const router = createBrowserRouter([
   {
     path: "result/:userToken",
     element: < WordCloudComponent />
+  },
+  {
+    path: "upload",
+    element: < UploadComponent />
   }
 ])
 
