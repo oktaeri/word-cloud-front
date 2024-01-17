@@ -22,3 +22,28 @@ code {
   display: inline-flex;
   align-items: center;
 }
+
+.info-icon {
+  color: #007bff;
+}
+
+.word-cloud-container {
+  position: relative;
+  margin-top: 5em;
+  margin-bottom: 5em;
+  z-index: 1;
+}
+
+.word-cloud-title {
+  position: relative;
+  z-index: 2;
+}
+
+.word-cloud-button {
+  position:relative;
+  z-index: 2;
+}
+
+.word-cloud {
+  transform: scale(2);
+}

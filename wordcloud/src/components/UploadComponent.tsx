@@ -1,6 +1,12 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { UploadService } from "../services/UploadService";
+import ProgressBar from "./ProgressBar";
 import { useNavigate } from "react-router-dom";
+import { AxiosProgressEvent } from "axios";
+
+import tippy from "tippy.js";
+import "tippy.js/dist/tippy.css";
+import "tippy.js/animations/scale.css";
 
 function UploadComponent() {
   const [file, setFile] = useState<File | null>(null);
@@ -11,7 +17,16 @@ function UploadComponent() {
   const [userToken, setUserToken] = useState<string>("");
   const [tokenError, setTokenError] = useState<string>("");
   const [fileError, setFileError] = useState<string>("");
+  const [uploadProgress, setUploadProgress] = useState<number | undefined>(undefined);
   const navigate = useNavigate();
+
+  useEffect(() => {
+    tippy(".tooltip-trigger", {
+      placement: "top",
+      animation: "scale",
+      content: (reference: Element) => reference.getAttribute("title") || "",
+    });
+  }, []);
 
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const selectedFile = event.target.files && event.target.files[0];
@@ -30,12 +45,23 @@ function UploadComponent() {
     const uploadService = new UploadService();
 
     try {
-      await uploadService.uploadFile(
+      const response = await uploadService.uploadFile(
         file,
         Number(minimumCount),
         filterCommonWords,
-        customWords
+        customWords,
+        (progressEvent: AxiosProgressEvent) => {
+          const progress = ((progressEvent.loaded || 0) / (progressEvent.total || 1)) * 100;
+          setUploadProgress(progress);
+        }
       );
+
+      // Access the userToken from the response
+    const userToken = response.data;
+
+    // Redirect to the result page using the userToken
+    navigate(`/result/${userToken}`);
+
       console.log("File uploaded successfully!");
     } catch (error) {
       console.error("Error uploading file:", error);
@@ -70,7 +96,7 @@ function UploadComponent() {
         </p>
         {showTokenInput ? (
           <form className="needs-validation">
-            <label className="form-label">Enter your token:</label>
+            <label className="form-label">Enter your token</label>
             <input
               required
               className={`form-control mb-3 ${tokenError && "is-invalid"}`}
@@ -104,6 +130,9 @@ function UploadComponent() {
 
       {!showTokenInput && (
         <>
+        <div className="mb-3">
+        {uploadProgress !== undefined && <ProgressBar progress={uploadProgress} />}
+        </div>
           <div className="form-group row mb-3">
             <label htmlFor="formFileLg" className="col-lg-4 col-form-label">
               Choose File
@@ -126,7 +155,7 @@ function UploadComponent() {
               htmlFor="flexCheckDefault"
               className="col-lg-4 col-form-label"
             >
-              Filter Common Words
+              Filter Common Words <i className="info-icon bi bi-info-circle tooltip-trigger" title="Check to filter common words (the, an, a, at, ... )"></i>
             </label>
             <div className="col-lg-8">
               <div className="form-check form-switch scaled-switch">
@@ -143,24 +172,8 @@ function UploadComponent() {
           </div>
 
           <div className="form-group row mb-3">
-            <label htmlFor="minimumCount" className="col-lg-4 col-form-label">
-              Minimum Count
-            </label>
-            <div className="col-lg-8">
-              <input
-                className="form-control"
-                placeholder=""
-                id="minimumCount"
-                type="number"
-                value={minimumCount}
-                onChange={(e) => setMinimumCount(e.target.value)}
-              />
-            </div>
-          </div>
-
-          <div className="form-group row mb-3">
             <label htmlFor="floatingInput" className="col-lg-4 col-form-label">
-              Custom Words
+              Custom Words <i className="info-icon bi bi-info-circle tooltip-trigger" title="Add your own words to filter out (separated by commas)"></i>
             </label>
             <div className="col-lg-8">
               <input
@@ -174,6 +187,21 @@ function UploadComponent() {
             </div>
           </div>
 
+          <div className="form-group row mb-3">
+            <label htmlFor="minimumCount" className="col-lg-4 col-form-label">
+              Minimum Count <i className="info-icon bi bi-info-circle tooltip-trigger" title="The minimum amount a word has to occur in the text to be included in the cloud"></i>
+            </label>
+            <div className="col-lg-8">
+              <input
+                className="form-control"
+                placeholder=""
+                id="minimumCount"
+                type="number"
+                value={minimumCount}
+                onChange={(e) => setMinimumCount(e.target.value)}
+              />
+            </div>
+          </div>
           <div className="form-group row mb-3">
             <div className="col-lg-8 offset-lg-4">
               <button className="btn btn-primary" onClick={handleUpload}>
