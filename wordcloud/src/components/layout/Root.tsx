@@ -2,11 +2,9 @@ import { Outlet } from "react-router-dom";
 
 function Root() {
   return (
-    <div>
-      <div className="container d-flex justify-content-center mt-5">
-        <div>
-          <Outlet />
-        </div>
+    <div className="container d-flex justify-content-center mt-3 mb-3">
+      <div>
+        <Outlet />
       </div>
     </div>
   );
