@@ -4,7 +4,7 @@ interface ProgressBarProps {
   progress: number;
 }
 
-function ProgressBar({ progress }: ProgressBarProps): JSX.Element {
+function ProgressBar({ progress }: ProgressBarProps): React.JSX.Element {
   return (
     <div className="progress">
       <div
