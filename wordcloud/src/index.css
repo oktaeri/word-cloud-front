@@ -1,49 +1,83 @@
 body {
   margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen",
+    "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue",
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  background: rgb(181, 243, 252);
+  background: radial-gradient(
+    circle,
+    rgba(181, 243, 252, 1) 0%,
+    rgba(146, 168, 237, 1) 100%
+  );
 }
 
 code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+  font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
     monospace;
 }
 
 .scaled-switch {
   transform: scale(1.3);
   transform-origin: left center;
-  margin-top: 1em;
 }
 
 .form-check.form-switch {
   display: inline-flex;
   align-items: center;
+  padding-top: 1em;
 }
 
 .info-icon {
   color: #007bff;
 }
 
+.form-container {
+  max-width: 70%;
+}
+
 .word-cloud-container {
   position: relative;
   margin-top: 5em;
-  margin-bottom: 5em;
+  margin-bottom: 3em;
   z-index: 1;
 }
 
-.word-cloud-title {
-  position: relative;
-  z-index: 2;
+.main-title {
+  margin: 0em 3em 0.4em 3em;
 }
 
 .word-cloud-button {
-  position:relative;
+  position: relative;
   z-index: 2;
 }
 
 .word-cloud {
   transform: scale(2);
+  margin: 0em 10em 0.4em 10em;
+}
+
+.json-container {
+  background-color: rgba(219, 219, 219, 0.3);
+  border-radius: 1rem;
+  margin-top: 1em;
+}
+
+.json-container pre {
+  font-weight: bold;
+}
+
+.copy-text {
+  font-size: 0.8em;
+}
+
+.content-container {
+  background-color: rgba(252, 253, 255, 0.8);
+  padding: 5em;
+  border-radius: 1rem;
+}
+
+.transparent-image-container {
+  mix-blend-mode: multiply;
 }
