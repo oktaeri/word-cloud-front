@@ -17,7 +17,9 @@ function UploadComponent() {
   const [userToken, setUserToken] = useState<string>("");
   const [tokenError, setTokenError] = useState<string>("");
   const [fileError, setFileError] = useState<string>("");
-  const [uploadProgress, setUploadProgress] = useState<number | undefined>(undefined);
+  const [uploadProgress, setUploadProgress] = useState<number | undefined>(
+    undefined
+  );
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -51,16 +53,17 @@ function UploadComponent() {
         filterCommonWords,
         customWords,
         (progressEvent: AxiosProgressEvent) => {
-          const progress = ((progressEvent.loaded || 0) / (progressEvent.total || 1)) * 100;
+          const progress =
+            ((progressEvent.loaded || 0) / (progressEvent.total || 1)) * 100;
           setUploadProgress(progress);
         }
       );
 
       // Access the userToken from the response
-    const userToken = response.data;
+      const userToken = response.data;
 
-    // Redirect to the result page using the userToken
-    navigate(`/result/${userToken}`);
+      // Redirect to the result page using the userToken
+      navigate(`/result/${userToken}`);
 
       console.log("File uploaded successfully!");
     } catch (error) {
@@ -88,12 +91,12 @@ function UploadComponent() {
   };
 
   return (
-    <div className="container">
+    <div className="container content-container">
       <div className="text-center mb-5">
-        <h1>Welcome to WordCloud!</h1>
-        <p>
-          Upload your .txt file (up to 100MB) and get your Word Cloud now! :)
-        </p>
+        <div className="transparent-image-container">
+          <img src="/images/cloud.png" alt="cloud" height="100px" />
+        </div>
+        <h1 className="main-title">Welcome to WordCloud!</h1>
         {showTokenInput ? (
           <form className="needs-validation">
             <label className="form-label">Enter your token</label>
@@ -130,83 +133,105 @@ function UploadComponent() {
 
       {!showTokenInput && (
         <>
-        <div className="mb-3">
-        {uploadProgress !== undefined && <ProgressBar progress={uploadProgress} />}
-        </div>
-          <div className="form-group row mb-3">
-            <label htmlFor="formFileLg" className="col-lg-4 col-form-label">
-              Choose File
-            </label>
-            <div className="col-lg-8">
-              <input
-                required
-                className={`form-control ${fileError && "is-invalid"}`}
-                type="file"
-                accept="text/plain"
-                id="formFileLg"
-                onChange={handleFileChange}
-              />
-              <div className="invalid-feedback">{fileError}</div>
-            </div>
+          <p className="pb-2 text-center">
+            Upload your .txt file (up to 100MB) and get your Word Cloud now! :)
+          </p>
+          <div className="mb-3">
+            {uploadProgress !== undefined && (
+              <ProgressBar progress={uploadProgress} />
+            )}
           </div>
-
-          <div className="form-group row mb-3">
-            <label
-              htmlFor="flexCheckDefault"
-              className="col-lg-4 col-form-label"
-            >
-              Filter Common Words <i className="info-icon bi bi-info-circle tooltip-trigger" title="Check to filter common words (the, an, a, at, ... )"></i>
-            </label>
-            <div className="col-lg-8">
-              <div className="form-check form-switch scaled-switch">
+          <div className="form-container mx-auto">
+            <div className="form-group row mb-3">
+              <label htmlFor="formFileLg" className="col-lg-4 col-form-label">
+                Choose File
+              </label>
+              <div className="col-lg-8">
                 <input
-                  className="form-check-input"
-                  type="checkbox"
-                  id="flexCheckDefault"
-                  role="switch"
-                  checked={filterCommonWords}
-                  onChange={(e) => setFilterCommonWords(e.target.checked)}
+                  required
+                  className={`form-control ${fileError && "is-invalid"}`}
+                  type="file"
+                  accept="text/plain"
+                  id="formFileLg"
+                  onChange={handleFileChange}
+                />
+                <div className="invalid-feedback">{fileError}</div>
+              </div>
+            </div>
+
+            <div className="form-group row mb-3">
+              <label
+                htmlFor="flexCheckDefault"
+                className="col-lg-4 col-form-label"
+              >
+                Filter Common Words{" "}
+                <i
+                  className="info-icon bi bi-info-circle tooltip-trigger"
+                  title="Check to filter common words (the, an, a, at, ... )"
+                ></i>
+              </label>
+              <div className="col-lg-8">
+                <div className="form-check form-switch scaled-switch">
+                  <input
+                    className="form-check-input"
+                    type="checkbox"
+                    id="flexCheckDefault"
+                    role="switch"
+                    checked={filterCommonWords}
+                    onChange={(e) => setFilterCommonWords(e.target.checked)}
+                  />
+                </div>
+              </div>
+            </div>
+
+            <div className="form-group row mb-3">
+              <label
+                htmlFor="floatingInput"
+                className="col-lg-4 col-form-label"
+              >
+                Custom Words{" "}
+                <i
+                  className="info-icon bi bi-info-circle tooltip-trigger"
+                  title="Add your own words to filter out (separated by commas)"
+                ></i>
+              </label>
+              <div className="col-lg-8">
+                <input
+                  type="text"
+                  placeholder=""
+                  id="floatingInput"
+                  className="form-control"
+                  value={customWords}
+                  onChange={(e) => setCustomWords(e.target.value)}
                 />
               </div>
             </div>
-          </div>
 
-          <div className="form-group row mb-3">
-            <label htmlFor="floatingInput" className="col-lg-4 col-form-label">
-              Custom Words <i className="info-icon bi bi-info-circle tooltip-trigger" title="Add your own words to filter out (separated by commas)"></i>
-            </label>
-            <div className="col-lg-8">
-              <input
-                type="text"
-                placeholder=""
-                id="floatingInput"
-                className="form-control"
-                value={customWords}
-                onChange={(e) => setCustomWords(e.target.value)}
-              />
+            <div className="form-group row mb-3">
+              <label htmlFor="minimumCount" className="col-lg-4 col-form-label">
+                Minimum Count{" "}
+                <i
+                  className="info-icon bi bi-info-circle tooltip-trigger"
+                  title="The minimum amount a word has to occur in the text to be included in the cloud"
+                ></i>
+              </label>
+              <div className="col-lg-8">
+                <input
+                  className="form-control"
+                  placeholder=""
+                  id="minimumCount"
+                  type="number"
+                  value={minimumCount}
+                  onChange={(e) => setMinimumCount(e.target.value)}
+                />
+              </div>
             </div>
-          </div>
-
-          <div className="form-group row mb-3">
-            <label htmlFor="minimumCount" className="col-lg-4 col-form-label">
-              Minimum Count <i className="info-icon bi bi-info-circle tooltip-trigger" title="The minimum amount a word has to occur in the text to be included in the cloud"></i>
-            </label>
-            <div className="col-lg-8">
-              <input
-                className="form-control"
-                placeholder=""
-                id="minimumCount"
-                type="number"
-                value={minimumCount}
-                onChange={(e) => setMinimumCount(e.target.value)}
-              />
-            </div>
-          </div>
-          <div className="form-group row mb-3">
-            <div className="col-lg-8 offset-lg-4">
-              <button className="btn btn-primary" onClick={handleUpload}>
-                Upload
-              </button>
+            <div className="form-group row mb-3">
+              <div className="col-lg-8 offset-lg-5">
+                <button className="btn btn-primary" onClick={handleUpload}>
+                  Upload
+                </button>
+              </div>
             </div>
           </div>
         </>
