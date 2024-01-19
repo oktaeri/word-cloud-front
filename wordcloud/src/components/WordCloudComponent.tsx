@@ -48,7 +48,6 @@ function WordCloudComponent() {
               setStatusMessage(null);
               const fetchedWordCounts: IResultDTO[] = updatedResponse.data;
               setWordCounts(fetchedWordCounts);
-              window.location.reload();
             }
           }, 5000);
         } else if (response.status === 200) {
