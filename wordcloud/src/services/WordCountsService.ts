@@ -12,7 +12,6 @@ export class WordCountService extends BaseService {
       const response = await this.axios.get<IResultDTO[]>(`/${userToken}`);
       return response;
     } catch (error) {
-      console.error('Error fetching word counts:', error);
       throw error;
     }
   }

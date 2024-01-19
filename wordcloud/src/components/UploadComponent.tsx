@@ -64,8 +64,6 @@ function UploadComponent() {
 
       // Redirect to the result page using the userToken
       navigate(`/result/${userToken}`);
-
-      console.log("File uploaded successfully!");
     } catch (error) {
       console.error("Error uploading file:", error);
     }

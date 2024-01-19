@@ -48,14 +48,12 @@ function WordCloudComponent() {
               setStatusMessage(null);
               const fetchedWordCounts: IResultDTO[] = updatedResponse.data;
               setWordCounts(fetchedWordCounts);
-              console.log("Word Counts:", fetchedWordCounts);
               window.location.reload();
             }
           }, 5000);
         } else if (response.status === 200) {
           const fetchedWordCounts: IResultDTO[] = response.data;
           setWordCounts(fetchedWordCounts);
-          console.log("Word Counts:", fetchedWordCounts);
         } else {
           setStatusMessage({
             title: "Error fetching word counts.",
