@@ -59,10 +59,8 @@ function UploadComponent() {
         }
       );
 
-      // Access the userToken from the response
       const userToken = response.data;
 
-      // Redirect to the result page using the userToken
       navigate(`/result/${userToken}`);
     } catch (error) {
       console.error("Error uploading file:", error);
@@ -84,7 +82,6 @@ function UploadComponent() {
       return;
     }
 
-    // Perform any necessary actions with the userToken (e.g., redirect)
     navigate(`/result/${userToken}`);
   };
 

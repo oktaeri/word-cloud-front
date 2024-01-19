@@ -5,7 +5,7 @@ export abstract class BaseService {
 
   constructor(baseURL: string) {
     this.axios = Axios.create({
-      baseURL: "http://localhost:8080/api/v1/" + baseURL,
+      baseURL: process.env.REACT_APP_API_URL + baseURL,
     });
   }
 }
