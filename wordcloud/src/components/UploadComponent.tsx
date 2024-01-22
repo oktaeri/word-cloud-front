@@ -33,10 +33,18 @@ function UploadComponent() {
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const selectedFile = event.target.files && event.target.files[0];
     if (selectedFile) {
-      setFile(selectedFile);
-      setFileError("");
+      const maxSize = 100 * 1024 * 1024;
+      if (selectedFile.size > maxSize) {
+        setFile(null);
+        event.target.value = "";
+        setFileError("File size exceeds the maximum limit of 100MB.");
+      } else {
+        setFile(selectedFile);
+        setFileError("");
+      }
     }
   };
+  
 
   const handleUpload = async () => {
     if (!file) {
