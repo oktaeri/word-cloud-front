@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import { useParams, Link } from "react-router-dom";
 import { WordCountService } from "../services/WordCountsService";
 import { IResultDTO } from "../dto/IResultDTO";
@@ -19,15 +19,15 @@ function WordCloudComponent() {
   const [renderAsCloud, setRenderAsCloud] = useState<boolean>(false);
   const [copiedToClipboard, setCopiedToClipboard] = useState<boolean>(false);
 
-  useEffect(() => {
-    const fetchData = async () => {
-      if (!userToken) {
-        console.error("User token not provided.");
-        return;
-      }
+  const fetchData = useCallback(async () => {
+    if (!userToken) {
+      console.error("User token not provided.");
+      return;
+    }
 
-      const wordCloudService = new WordCountService();
+    const wordCloudService = new WordCountService();
 
+    setTimeout(async () => {
       try {
         const response = await wordCloudService.getWordCounts(userToken);
 
@@ -38,16 +38,20 @@ function WordCloudComponent() {
             image: "/images/cat-gif.gif",
           });
 
-          const intervalId = setInterval(async () => {
+          setTimeout(async () => {
             const updatedResponse = await wordCloudService.getWordCounts(
               userToken
             );
 
             if (updatedResponse.status === 200) {
-              clearInterval(intervalId);
               setStatusMessage(null);
               const fetchedWordCounts: IResultDTO[] = updatedResponse.data;
               setWordCounts(fetchedWordCounts);
+            } else {
+              setStatusMessage({
+                title: "Error fetching word counts.",
+                body: "Please try again later.",
+              });
             }
           }, 5000);
         } else if (response.status === 200) {
@@ -65,10 +69,12 @@ function WordCloudComponent() {
           body: `Please check it and try again: ${userToken}`,
         });
       }
-    };
-
-    fetchData();
+    }, 100);
   }, [userToken]);
+
+  useEffect(() => {
+    fetchData();
+  }, [userToken, fetchData]);
 
   const handleListButton = () => {
     setCopiedToClipboard(false);
@@ -85,6 +91,11 @@ function WordCloudComponent() {
   const handleCopyToClipboardButton = () => {
     navigator.clipboard.writeText(JSON.stringify(wordCounts, null, " "));
     setCopiedToClipboard(true);
+  };
+
+  const handleRefreshButton = () => {
+    setCopiedToClipboard(false);
+    fetchData();
   };
 
   const options = {
@@ -126,6 +137,12 @@ function WordCloudComponent() {
             </p>
           )}
           <div>
+            <button
+              className="btn btn-success word-cloud-button"
+              onClick={handleRefreshButton}
+            >
+              <i className="bi bi-arrow-clockwise"></i>
+            </button>
             <button
               className="btn btn-primary m-2 word-cloud-button"
               onClick={handleListButton}
